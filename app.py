@@ -56,9 +56,9 @@ if user_input := st.chat_input("Deine Frage..."):
                 # Die Regeln übergeben
                 config = types.GenerateContentConfig(system_instruction=system_regeln)
                 
-                # HIER IST DIE ÄNDERUNG: Wir nutzen jetzt das stabile und verfügbare 2.0-Flash Modell!
+                # WIR TESTEN DAS LITE-MODELL: Das Modell für maximale Effizienz
                 response = client.models.generate_content(
-                    model="gemini-2.0-flash",
+                    model="gemini-2.0-flash-lite",
                     contents=gemini_verlauf,
                     config=config
                 )
@@ -68,7 +68,5 @@ if user_input := st.chat_input("Deine Frage..."):
                 st.session_state.messages.append({"role": "assistant", "content": response.text})
                 
             except Exception as e:
-                if "429" in str(e):
-                    st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte etwa eine Minute und versuche es noch einmal! ⏱️")
-                else:
-                    st.error(f"Fehler bei der Anfrage: {e}")
+                # RÖNTGENBLICK AN: Wir zeigen uns jetzt gnadenlos den echten Fehler an, um das Limit-Rätsel zu lösen!
+                st.error(f"Technische Info für uns: {e}")
