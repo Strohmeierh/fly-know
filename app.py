@@ -1,11 +1,12 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
-# 1. API Key sicher laden und Google konfigurieren
+# 1. API Key sicher laden und neuen Google Client initialisieren (NEU)
 api_key = st.secrets["GEMINI_API_KEY"]
-genai.configure(api_key=api_key)
+client = genai.Client(api_key=api_key)
 
-# 2. Dein Wissen aus der Textdatei laden (Zurück zur superschnellen .txt Datei)
+# 2. Dein Wissen aus der Textdatei laden
 try:
     with open("wissen.txt", "r", encoding="utf-8") as datei:
         mein_wissen = datei.read()
@@ -22,38 +23,40 @@ WISSENSBASIS:
 {mein_wissen}
 """
 
-# 4. Das Modell mit den festen Regeln initiieren
-model = genai.GenerativeModel(
-    model_name='gemini-2.5-flash',
-    system_instruction=system_regeln
-)
-
-# 5. Webseite aufbauen
+# 4. Webseite aufbauen
 st.title("Luftsportgemeinschaft Hotzenwald FAQ")
-
 st.write("Stelle Fragen an unsere KI. Der Verlauf wird nicht gespeichert und beim Neuladen der Seite geleert.")
 
-# 6. Den Chat-Verlauf für diese Sitzung starten/speichern
+# 5. Konfiguration und Chat-Sitzung starten (NEUES SYSTEM)
 if "chat" not in st.session_state:
-    st.session_state.chat = model.start_chat(history=[])
+    # Die Regeln werden jetzt in einem Config-Objekt übergeben
+    config = types.GenerateContentConfig(system_instruction=system_regeln)
+    st.session_state.chat = client.chats.create(model="gemini-2.5-flash", config=config)
+    
+    # Wir speichern den Verlauf jetzt super-sauber direkt in Streamlit
+    st.session_state.messages = []
 
-# 7. Den bisherigen Verlauf auf der Seite anzeigen
-for message in st.session_state.chat.history:
-    rolle = "assistant" if message.role == "model" else "user"
-    with st.chat_message(rolle):
-        st.markdown(message.parts[0].text)
+# 6. Den bisherigen Verlauf auf der Seite anzeigen
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-# 8. Das neue Chat-Eingabefeld
+# 7. Das neue Chat-Eingabefeld
 if user_input := st.chat_input("Deine Frage..."):
     
+    # Frage des Nutzers anzeigen und speichern
+    st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
     
+    # Antwort der KI holen und anzeigen
     with st.chat_message("assistant"):
         with st.spinner("Daten werden ermittelt..."):
             try:
                 response = st.session_state.chat.send_message(user_input)
                 st.markdown(response.text)
+                # Antwort der KI im Verlauf speichern
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
             except Exception as e:
                 if "429" in str(e):
                     st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte etwa eine Minute und versuche es noch einmal! ⏱️")
