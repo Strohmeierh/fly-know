@@ -28,34 +28,32 @@ model = genai.GenerativeModel(
     system_instruction=system_regeln
 )
 
-# 5. Webseite aufbauen
-st.title("💬 Mein NotebookLM Chat")
-st.write("Stelle Fragen an dein Dokument. Der Verlauf wird beim Neuladen der Seite geleert.")
+# 5. Webseite aufbauen (DEINE ÄNDERUNG: Neuer Titel)
+st.title("Luftsportgemeinschaft Hotzenwald FAQ")
+
+# (Optional: Hier kannst du auch den kleinen Untertitel anpassen, falls du magst)
+st.write("Stelle Fragen an unser Dokument. Der Verlauf wird beim Neuladen der Seite geleert.")
 
 # 6. Den Chat-Verlauf für diese Sitzung starten/speichern
-# Wenn noch kein Chat existiert, starten wir einen neuen leeren Chat
 if "chat" not in st.session_state:
     st.session_state.chat = model.start_chat(history=[])
 
-# 7. Den bisherigen Verlauf auf der Seite anzeigen (die Chat-Blasen)
+# 7. Den bisherigen Verlauf auf der Seite anzeigen
 for message in st.session_state.chat.history:
-    # Gemini nennt die KI "model", Streamlit nennt sie "assistant" (für das Icon)
     rolle = "assistant" if message.role == "model" else "user"
     with st.chat_message(rolle):
         st.markdown(message.parts[0].text)
 
-# 8. Das neue Chat-Eingabefeld (rutscht automatisch an den unteren Bildschirmrand)
+# 8. Das neue Chat-Eingabefeld
 if user_input := st.chat_input("Deine Frage..."):
     
-    # Die Frage des Nutzers sofort als Sprechblase anzeigen
     with st.chat_message("user"):
         st.markdown(user_input)
     
-    # Die Antwort der KI abrufen und anzeigen
     with st.chat_message("assistant"):
-        with st.spinner("KI liest und tippt..."):
+        # DEINE ÄNDERUNG: Neuer Lade-Text
+        with st.spinner("Daten werden ermittelt..."):
             try:
-                # send_message schickt die Frage ab UND speichert sie automatisch im Verlauf
                 response = st.session_state.chat.send_message(user_input)
                 st.markdown(response.text)
             except Exception as e:
