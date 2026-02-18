@@ -8,8 +8,7 @@ genai.configure(api_key=api_key)
 # 2. Das korrekte, neueste Modell nutzen!
 model = genai.GenerativeModel(
     model_name='gemini-2.5-flash',
-    system_instruction="Du bist ein direkter und sachlicher Assistent der Luftsportgemeinschaft Hotzenwald und gibst Auskunft über flugrelevante Themen auf Anfrage als FAQ. 
-    Antworte immer extrem kurz, prägnant und auf den Punkt. Lass unnötige Höflichkeitsfloskeln weg."
+    system_instruction="Du bist ein direkter und sachlicher Assistent der Luftsportgemeinschaft Hotzenwald und gibst Auskunft über flugrelevante Themen auf Anfrage als FAQ. Antworte immer extrem kurz, prägnant und auf den Punkt. Lass unnötige Höflichkeitsfloskeln weg."
 )
 
 # 3. Dein NotebookLM Wissen aus der Textdatei laden
