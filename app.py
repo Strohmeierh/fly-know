@@ -27,7 +27,7 @@ WISSENSBASIS:
 st.title("Luftsportgemeinschaft Hotzenwald FAQ")
 st.write("Stelle Fragen an unsere KI. Der Verlauf wird nicht gespeichert und beim Neuladen der Seite geleert.")
 
-# 5. Verlauf als einfache Liste speichern (Bulletproof Methode für Streamlit)
+# 5. Verlauf als einfache Liste speichern
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -47,16 +47,20 @@ if user_input := st.chat_input("Deine Frage..."):
     with st.chat_message("assistant"):
         with st.spinner("Daten werden ermittelt..."):
             try:
-                # Den Verlauf für das neue Google-Paket passend formatieren
+                # DIE LÖSUNG: Wir verpacken den Verlauf exakt in die Objekte des neuen SDKs
                 gemini_verlauf = []
                 for m in st.session_state.messages:
                     g_role = "user" if m["role"] == "user" else "model"
-                    gemini_verlauf.append({"role": g_role, "parts": [{"text": m["content"]}]})
+                    
+                    # Nachricht streng nach neuem Google-Standard formatieren
+                    nachrichten_teil = types.Part.from_text(text=m["content"])
+                    nachrichten_paket = types.Content(role=g_role, parts=[nachrichten_teil])
+                    gemini_verlauf.append(nachrichten_paket)
                     
                 # Die Regeln übergeben
                 config = types.GenerateContentConfig(system_instruction=system_regeln)
                 
-                # DEIN WUNSCHMODELL: Das schnellste und beste Modell für den Live-Betrieb
+                # Anfrage an das 2.5-Flash Modell senden
                 response = client.models.generate_content(
                     model="gemini-2.5-flash",
                     contents=gemini_verlauf,
@@ -68,7 +72,7 @@ if user_input := st.chat_input("Deine Frage..."):
                 st.session_state.messages.append({"role": "assistant", "content": response.text})
                 
             except Exception as e:
-                # Freundliche Vereins-Meldung, falls doch mal ein Fehler passiert
+                # Fehler abfangen (wie das Rate Limit)
                 if "429" in str(e):
                     st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte kurz und versuche es noch einmal! ⏱️")
                 else:
