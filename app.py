@@ -14,8 +14,8 @@ except FileNotFoundError:
 
 # 3. Die System-Anweisung: Hier definieren wir die Regeln UND übergeben das Wissen
 system_regeln = f"""
-Du bist ein direkter und hilfreicher Assistent. 
-Antworte immer extrem kurz, prägnant und auf den Punkt in maximal 2-3 Sätzen.
+Du bist ein direkter und hilfreicher Assistent der Luftsportgemeinschaft Hotzenwald e.V.. 
+Antworte immer extrem kurz, prägnant und auf den Punkt.
 Nutze AUSSCHLIESSLICH das folgende Wissen für deine Antworten. Wenn die Antwort nicht im Text steht, sage das ehrlich.
 
 WISSENSBASIS:
@@ -24,7 +24,7 @@ WISSENSBASIS:
 
 # 4. Das Modell mit den festen Regeln initiieren
 model = genai.GenerativeModel(
-    model_name='gemini-2.5-flash',
+    model_name='gemini-2.5-pro',
     system_instruction=system_regeln
 )
 
@@ -32,7 +32,7 @@ model = genai.GenerativeModel(
 st.title("Luftsportgemeinschaft Hotzenwald FAQ")
 
 # (Optional: Hier kannst du auch den kleinen Untertitel anpassen, falls du magst)
-st.write("Stelle Fragen an unser Dokument. Der Verlauf wird beim Neuladen der Seite geleert.")
+st.write("Stelle Fragen an unsere KI. Der Verlauf wird nicht gespeichert und beim Neuladen der Seite geleert.")
 
 # 6. Den Chat-Verlauf für diese Sitzung starten/speichern
 if "chat" not in st.session_state:
