@@ -1,32 +1,24 @@
 import streamlit as st
 import google.generativeai as genai
-import os
 
-# API Key sicher aus den Streamlit Secrets laden
-api_key = st.secrets["GEMINI_API_KEY"]
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-1.5-flash')
+st.title("Fehlersuche: Meine verfügbaren Modelle")
 
-# NEU: Das Skript liest jetzt automatisch die Datei wissen.txt ein!
 try:
-    with open("wissen.txt", "r", encoding="utf-8") as datei:
-        mein_wissen = datei.read()
-except FileNotFoundError:
-    mein_wissen = "Fehler: Die Datei wissen.txt wurde nicht gefunden. Bitte lade sie auf GitHub hoch."
-
-st.title("Mein eigenes NotebookLM")
-user_input = st.text_area("Stelle eine Frage an dein Dokument:")
-
-if st.button("Frage stellen"):
-    if user_input:
-        with st.spinner("KI denkt nach..."):
-            # Prompt zusammenbauen: Wissen + Frage
-            full_prompt = f"Nutze folgendes Wissen, um die Frage zu beantworten:\n\n{mein_wissen}\n\nFrage: {user_input}"
+    # API Key laden
+    api_key = st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=api_key)
+    
+    st.write("Google sagt, du darfst diese Modelle nutzen:")
+    
+    # Google nach den Modellen fragen
+    modelle_gefunden = False
+    for m in genai.list_models():
+        if 'generateContent' in m.supported_generation_methods:
+            st.code(m.name)
+            modelle_gefunden = True
             
-            # Anfrage an Gemini senden
-            response = model.generate_content(full_prompt)
-            
-            st.success("Antwort:")
-            st.write(response.text)
-    else:
-        st.warning("Bitte gib eine Frage ein.")
+    if not modelle_gefunden:
+        st.warning("Dein API-Key ist gültig, aber es sind keine Text-Modelle freigeschaltet.")
+
+except Exception as e:
+    st.error(f"Es gab ein Problem mit der Verbindung: {e}")
