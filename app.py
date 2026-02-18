@@ -56,19 +56,13 @@ if user_input := st.chat_input("Deine Frage..."):
                 # Die Regeln übergeben
                 config = types.GenerateContentConfig(system_instruction=system_regeln)
                 
-                # ÄNDERUNG: Hier nutzen wir jetzt das 1.5-Flash Modell mit 1.500 Anfragen pro Tag!
+                # HIER IST DIE ÄNDERUNG: Wir nutzen jetzt das stabile und verfügbare 2.0-Flash Modell!
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash",
+                    model="gemini-2.0-flash",
                     contents=gemini_verlauf,
                     config=config
                 )
                 
                 # Antwort anzeigen und speichern
                 st.markdown(response.text)
-                st.session_state.messages.append({"role": "assistant", "content": response.text})
-                
-            except Exception as e:
-                if "429" in str(e):
-                    st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte etwa eine Minute und versuche es noch einmal! ⏱️")
-                else:
-                    st.error(f"Fehler bei der Anfrage: {e}")
+                st.session_state.messages
