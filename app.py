@@ -5,7 +5,7 @@ import os
 # API Key sicher aus den Streamlit Secrets laden
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 # NEU: Das Skript liest jetzt automatisch die Datei wissen.txt ein!
 try:
