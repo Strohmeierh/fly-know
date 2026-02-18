@@ -56,9 +56,9 @@ if user_input := st.chat_input("Deine Frage..."):
                 # Die Regeln übergeben
                 config = types.GenerateContentConfig(system_instruction=system_regeln)
                 
-                # Anfrage an Gemini senden (ohne fehleranfällige Dauerverbindung)
+                # ÄNDERUNG: Hier nutzen wir jetzt das 1.5-Flash Modell mit 1.500 Anfragen pro Tag!
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-1.5-flash",
                     contents=gemini_verlauf,
                     config=config
                 )
@@ -70,7 +70,5 @@ if user_input := st.chat_input("Deine Frage..."):
             except Exception as e:
                 if "429" in str(e):
                     st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte etwa eine Minute und versuche es noch einmal! ⏱️")
-                    # TEMPORÄR FÜR UNS: Zeigt den echten Fehler, falls es doch etwas anderes ist!
-                    st.error(f"Technische Info für uns: {e}")
                 else:
                     st.error(f"Fehler bei der Anfrage: {e}")
