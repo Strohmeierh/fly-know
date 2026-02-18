@@ -22,16 +22,15 @@ WISSENSBASIS:
 {mein_wissen}
 """
 
-# 4. Das Modell mit den festen Regeln initiieren (HIER IST DIE ÄNDERUNG)
+# 4. Das Modell mit den festen Regeln initiieren (ZURÜCK AUF DAS STABILE FLASH MODELL)
 model = genai.GenerativeModel(
-    model_name='gemini-3-flash-preview',
+    model_name='gemini-2.5-flash',
     system_instruction=system_regeln
 )
 
 # 5. Webseite aufbauen
 st.title("Luftsportgemeinschaft Hotzenwald FAQ")
 
-# (Optional: Hier kannst du auch den kleinen Untertitel anpassen, falls du magst)
 st.write("Stelle Fragen an unsere KI. Der Verlauf wird nicht gespeichert und beim Neuladen der Seite geleert.")
 
 # 6. Den Chat-Verlauf für diese Sitzung starten/speichern
