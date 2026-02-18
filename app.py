@@ -22,7 +22,7 @@ WISSENSBASIS:
 {mein_wissen}
 """
 
-# 4. Das Modell mit den festen Regeln initiieren (ZURÜCK AUF DAS STABILE FLASH MODELL)
+# 4. Das Modell mit den festen Regeln initiieren
 model = genai.GenerativeModel(
     model_name='gemini-2.5-flash',
     system_instruction=system_regeln
@@ -50,10 +50,13 @@ if user_input := st.chat_input("Deine Frage..."):
         st.markdown(user_input)
     
     with st.chat_message("assistant"):
-        # Neuer Lade-Text
         with st.spinner("Daten werden ermittelt..."):
             try:
                 response = st.session_state.chat.send_message(user_input)
                 st.markdown(response.text)
             except Exception as e:
-                st.error(f"Fehler bei der Anfrage: {e}")
+                # NEU: Hier fangen wir den Fehler 429 ab und zeigen eine freundliche Warnung
+                if "429" in str(e):
+                    st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte etwa eine Minute und versuche es noch einmal! ⏱️")
+                else:
+                    st.error(f"Fehler bei der Anfrage: {e}")
