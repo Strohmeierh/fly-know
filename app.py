@@ -14,21 +14,21 @@ except FileNotFoundError:
 
 # 3. Die System-Anweisung: Hier definieren wir die Regeln UND übergeben das Wissen
 system_regeln = f"""
-Du bist ein direkter und hilfreicher Assistent der Luftsportgemeinschaft Hotzenwald e.V.. 
-Antworte immer extrem kurz, prägnant und auf den Punkt.
+Du bist ein direkter und hilfreicher Assistent der Luftsportgemeinschaft Hotzenwald e.V. 
+Antworte immer kurz und prägnant.
 Nutze AUSSCHLIESSLICH das folgende Wissen für deine Antworten. Wenn die Antwort nicht im Text steht, sage das ehrlich.
 
 WISSENSBASIS:
 {mein_wissen}
 """
 
-# 4. Das Modell mit den festen Regeln initiieren
+# 4. Das Modell mit den festen Regeln initiieren (HIER IST DIE ÄNDERUNG)
 model = genai.GenerativeModel(
-    model_name='gemini-2.5-flash',
+    model_name='gemini-3-flash-preview',
     system_instruction=system_regeln
 )
 
-# 5. Webseite aufbauen (DEINE ÄNDERUNG: Neuer Titel)
+# 5. Webseite aufbauen
 st.title("Luftsportgemeinschaft Hotzenwald FAQ")
 
 # (Optional: Hier kannst du auch den kleinen Untertitel anpassen, falls du magst)
@@ -51,7 +51,7 @@ if user_input := st.chat_input("Deine Frage..."):
         st.markdown(user_input)
     
     with st.chat_message("assistant"):
-        # DEINE ÄNDERUNG: Neuer Lade-Text
+        # Neuer Lade-Text
         with st.spinner("Daten werden ermittelt..."):
             try:
                 response = st.session_state.chat.send_message(user_input)
