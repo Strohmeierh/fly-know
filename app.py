@@ -1,18 +1,45 @@
 import streamlit as st
 import google.generativeai as genai
+import os
+import PyPDF2
 
 # 1. API Key sicher laden und Google konfigurieren
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 2. Dein Wissen aus der Textdatei laden
-try:
-    with open("wissen.txt", "r", encoding="utf-8") as datei:
-        mein_wissen = datei.read()
-except FileNotFoundError:
-    mein_wissen = "Fehler: Die Datei wissen.txt wurde nicht gefunden."
+# 2. NEU: Funktion zum Auslesen aller PDFs in einem Ordner (mit Zwischenspeicher für mehr Geschwindigkeit)
+@st.cache_data
+def lade_wissen_aus_pdfs(ordner_pfad="dokumente"):
+    gesammeltes_wissen = ""
+    
+    # Prüfen, ob der Ordner überhaupt existiert
+    if not os.path.exists(ordner_pfad):
+        return f"Fehler: Der Ordner '{ordner_pfad}' wurde auf GitHub nicht gefunden."
+    
+    # Alle Dateien im Ordner durchgehen
+    for dateiname in os.listdir(ordner_pfad):
+        if dateiname.endswith(".pdf"):
+            dateipfad = os.path.join(ordner_pfad, dateiname)
+            try:
+                # PDF öffnen und Text aus allen Seiten auslesen
+                with open(dateipfad, "rb") as pdf_datei:
+                    pdf_leser = PyPDF2.PdfReader(pdf_datei)
+                    for seite in pdf_leser.pages:
+                        text = seite.extract_text()
+                        if text:
+                            gesammeltes_wissen += text + "\n"
+            except Exception as e:
+                st.error(f"Konnte {dateiname} nicht lesen: {e}")
+                
+    if not gesammeltes_wissen:
+         return "Fehler: Es konnte kein Text aus den PDFs extrahiert werden."
+         
+    return gesammeltes_wissen
 
-# 3. Die System-Anweisung: Hier definieren wir die Regeln UND übergeben das Wissen
+# Wissen einmalig laden
+mein_wissen = lade_wissen_aus_pdfs("dokumente")
+
+# 3. Die System-Anweisung
 system_regeln = f"""
 Du bist ein direkter und hilfreicher Assistent der Luftsportgemeinschaft Hotzenwald e.V. 
 Antworte immer kurz und prägnant.
@@ -22,7 +49,7 @@ WISSENSBASIS:
 {mein_wissen}
 """
 
-# 4. Das Modell mit den festen Regeln initiieren
+# 4. Das Modell initiieren
 model = genai.GenerativeModel(
     model_name='gemini-2.5-flash',
     system_instruction=system_regeln
@@ -55,7 +82,6 @@ if user_input := st.chat_input("Deine Frage..."):
                 response = st.session_state.chat.send_message(user_input)
                 st.markdown(response.text)
             except Exception as e:
-                # NEU: Hier fangen wir den Fehler 429 ab und zeigen eine freundliche Warnung
                 if "429" in str(e):
                     st.warning("Unsere KI macht gerade eine kleine Verschnaufpause, da zu viele Fragen gleichzeitig gestellt wurden. Bitte warte etwa eine Minute und versuche es noch einmal! ⏱️")
                 else:
