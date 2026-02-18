@@ -62,7 +62,7 @@ Arbeitsleistungen für die LGH sind im Geltungszeitraum der Ausbildungspauschale
 Bleibt ein Neumitglied nach Ablauf der Ausbildungspauschale weiterhin Mitglied, so hat es die ordentlichen Beiträge und Gebühren zu leisten. Der Aufnahmebeitrag wird erst nach Ablauf der Ausbildungspauschale fällig; dieser richtet sich nach dem Alter zu diesem Zeitpunkt.
 4. Fluggebühren
 4.1 Flugzeitgebühren
-ASK 210,20 € / Minute = 12,- € / StundeDuo Discus0,30 € / Minute= 18,- € / StundeMotorsegler (Dimona)1. bis 30. Minute: 1,70 € / Minute = 51,- € / ½Stundeab der 31. Minute: 1,35 € / Minute = 91,50 €/StundeMotorflugzeugeD-ESIA3,30 € / Minute = 198,- € / StundeOH-PIG2,50 € / Minute = 150,- € / Stunde
+ASK 210,20 € / Minute = 12,- € / StundeDuo Discus0,30 € / Minute= 18,- € / Stunde Motorsegler (Dimona)1. bis 30. Minute: 1,70 € / Minute = 51,- € / ½Stundeab der 31. Minute: 1,35 € / Minute = 91,50 €/StundeMotorflugzeugeD-ESIA3,30 € / Minute = 198,- € / StundeOH-PIG2,50 € / Minute = 150,- € / Stunde
 Die Flugzeitgebühr für die Motorflugzeuge kann bei geänderten Treibstoffpreisen von der erweiterten Vorstandsversammlung angepasst werden.
 4.2 Start- und Landegebühren
 Windenstart- / Landegebühr (für alle Flugzeuge) 5,- €; für Gastpiloten 6,- €
@@ -161,7 +161,7 @@ Gastflug zwei Stunden450,- €
 
 
 Sonderlandeplatz - Landung mit einer externen Maschine?
-Im Februar 2018 wurde das Segelflugglände Hütten-Hotzenwalds zum Sonderlandeplatz umgewidmet (ICAO-Kennung: EDSF). Das Starten und Landen ist jedoch lediglich für diejenigen Flugzeuge erlaubt, die mit Kennzeichen in der Flugplatzzulassung genannt sind. PPR (Prior Permission Required) gilt ausschließlich für HEMS (Helicopter Emergency Medical Services).
+Im Februar 2018 wurde das Segelflugglände Hütten-Hotzenwalds zum Sonderlandeplatz umgewidmet (ICAO-Kennung: EDSF). Das Starten und Landen ist jedoch lediglich für diejenigen Flugzeuge erlaubt, die mit Kennzeichen in der Flugplatzzulassung genannt sind. PPR (Prior Permission Required) gilt ausschließlich für HEMS (Helicopter Emergency Medical Services). Wenn du mit einem Motorflugzeug in Hütten landen willst, dann brauchst du eine Genehmgung vom Regierungspräsidium Stuttgart.
 
 
 Detaillierter Ablauf der Ausbildung zur Segelfluglizenz (SPL) gemäß Teil-SFCL und BWLV-Ausbildungshandbuch.
