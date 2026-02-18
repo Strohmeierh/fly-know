@@ -7,21 +7,25 @@ api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# Dein "NotebookLM" Wissen
-mein_wissen = """
-Hier kannst du deinen Text hineinkopieren, der das Wissen deines Notebooks darstellt.
-Du kannst hier alles reinschreiben, was die KI wissen soll.
-"""
+# NEU: Das Skript liest jetzt automatisch die Datei wissen.txt ein!
+try:
+    with open("wissen.txt", "r", encoding="utf-8") as datei:
+        mein_wissen = datei.read()
+except FileNotFoundError:
+    mein_wissen = "Fehler: Die Datei wissen.txt wurde nicht gefunden. Bitte lade sie auf GitHub hoch."
 
 st.title("Mein eigenes NotebookLM")
-user_input = st.text_area("Stelle eine Frage an das Dokument:")
+user_input = st.text_area("Stelle eine Frage an dein Dokument:")
 
 if st.button("Frage stellen"):
     if user_input:
         with st.spinner("KI denkt nach..."):
-            # Prompt zusammenbauen
-            full_prompt = f"Nutze folgendes Wissen:\n{mein_wissen}\n\nBeantworte die Frage: {user_input}"
+            # Prompt zusammenbauen: Wissen + Frage
+            full_prompt = f"Nutze folgendes Wissen, um die Frage zu beantworten:\n\n{mein_wissen}\n\nFrage: {user_input}"
+            
+            # Anfrage an Gemini senden
             response = model.generate_content(full_prompt)
+            
             st.success("Antwort:")
             st.write(response.text)
     else:
