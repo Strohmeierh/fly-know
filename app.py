@@ -2,9 +2,13 @@ import streamlit as st
 from google import genai
 from google.genai import types
 
-# 1. API Key sicher laden und neuen Google Client initialisieren (NEU)
-api_key = st.secrets["GEMINI_API_KEY"]
-client = genai.Client(api_key=api_key)
+# 1. API Key laden und Verbindung DAUERHAFT cachen (Das behebt den Fehler!)
+@st.cache_resource
+def get_client():
+    api_key = st.secrets["GEMINI_API_KEY"]
+    return genai.Client(api_key=api_key)
+
+client = get_client()
 
 # 2. Dein Wissen aus der Textdatei laden
 try:
@@ -27,13 +31,12 @@ WISSENSBASIS:
 st.title("Luftsportgemeinschaft Hotzenwald FAQ")
 st.write("Stelle Fragen an unsere KI. Der Verlauf wird nicht gespeichert und beim Neuladen der Seite geleert.")
 
-# 5. Konfiguration und Chat-Sitzung starten (NEUES SYSTEM)
+# 5. Konfiguration und Chat-Sitzung starten
 if "chat" not in st.session_state:
-    # Die Regeln werden jetzt in einem Config-Objekt übergeben
     config = types.GenerateContentConfig(system_instruction=system_regeln)
     st.session_state.chat = client.chats.create(model="gemini-2.5-flash", config=config)
     
-    # Wir speichern den Verlauf jetzt super-sauber direkt in Streamlit
+    # Den sichtbaren Verlauf speichern
     st.session_state.messages = []
 
 # 6. Den bisherigen Verlauf auf der Seite anzeigen
@@ -44,7 +47,7 @@ for msg in st.session_state.messages:
 # 7. Das neue Chat-Eingabefeld
 if user_input := st.chat_input("Deine Frage..."):
     
-    # Frage des Nutzers anzeigen und speichern
+    # Frage des Nutzers anzeigen und im Verlauf speichern
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
@@ -53,8 +56,10 @@ if user_input := st.chat_input("Deine Frage..."):
     with st.chat_message("assistant"):
         with st.spinner("Daten werden ermittelt..."):
             try:
+                # Hier nutzt der Chat nun den dauerhaft offenen Client
                 response = st.session_state.chat.send_message(user_input)
                 st.markdown(response.text)
+                
                 # Antwort der KI im Verlauf speichern
                 st.session_state.messages.append({"role": "assistant", "content": response.text})
             except Exception as e:
