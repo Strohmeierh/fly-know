@@ -33,12 +33,14 @@ with st.sidebar:
     
     # Variablen für die Schnell-Buttons
     quick_prompt = None
-    if st.button("Wetter Ossingen (Heute)", use_container_width=True):
-        quick_prompt = "Gib mir ein detailliertes VFR- und Segelflug-Briefing für Ossingen und Umgebung für den heutigen Tag."
-    if st.button("Wochenende: Thermik-Ausblick", use_container_width=True):
-        quick_prompt = "Wie sieht der Ausblick für das kommende Wochenende in der Nordschweiz aus? Fokus auf Hochdruckeinfluss und Segelflug-Thermik."
-    if st.button("METAR/TAF Zürich (LSZH)", use_container_width=True):
-        quick_prompt = "Bitte rufe das aktuellste METAR und TAF für LSZH (Zürich) ab und übersetze es in ein klares VFR-Briefing."
+    if st.button("EDSF (Hütten-Hotzenwald)", use_container_width=True):
+        quick_prompt = "Bitte gib mir ein aktuelles VFR- und Segelflug-Briefing für den Flugplatz Hütten-Hotzenwald (EDSF). Achte besonders auf lokale Gegebenheiten im Hotzenwald."
+    if st.button("LSZK (Speck Fehraltorf)", use_container_width=True):
+        quick_prompt = "Bitte rufe die aktuellen Wetterdaten für den Flugplatz Speck in Fehraltorf (LSZK) ab und erstelle ein präzises VFR-Briefing."
+    if st.button("Wangen bei Dübendorf", use_container_width=True):
+        quick_prompt = "Bitte gib mir ein detailliertes VFR-Wetterbriefing für Wangen bei Dübendorf, inklusive Nowcasting für die nächsten Stunden."
+    if st.button("Thermik: Schwarzwald & Alb", use_container_width=True):
+        quick_prompt = "Erstelle eine detaillierte Thermikprognose für den Schwarzwald und die Schwäbische Alb für heute und morgen. Bewerte die thermische Güte, die erwartete Basis der Cumuluswolken, mögliche Inversionen und warne vor potenziellen Überentwicklungen oder großflächiger Abschirmung."
 
 # --- Hauptbereich ---
 st.title("🛩️ Huberts KI-Flugwetter")
