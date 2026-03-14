@@ -36,8 +36,7 @@ Wind & QNH: Nenne Windrichtung, Stärke (inkl. potenzieller Böen) und den aktue
 🦅 Segelflug & Thermik-Bedingungen (heute):
 Schätze die thermische Güte, die Basis der Cumuluswolken, mögliche Ausbreitungen (Overdevelopment zu CBs) und Inversionen ein.
 
-📅 Mittelfristige Flugwetter-Planung (nächste 3 bis 7 Tage):
-Gib einen Ausblick für die Tourenplanung am Wochenende. Welche Grosswetterlage dominiert?
+📅 Mittelfristige Flugwetter-Planung (nächste 3 bis 7 Tage): Gib einen Ausblick für die Tourenplanung der kommenden Tage und am Wochenende. Welche Grosswetterlage dominiert?
 
 ⚠️ Gefahren:
 Warne vor VFR-relevanten Gefahren, aber nur, wenn diese absehbar sind. Sonst nicht erwähnen (Gewitter/CBs, Vereisungsgrenze, starke Windscherungen).
