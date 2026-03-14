@@ -14,37 +14,38 @@ except FileNotFoundError:
     system_regeln = "Du bist ein hilfreicher Flugwetter-Berater."
     st.error("Fehler: Die Datei Prompt.txt wurde nicht gefunden. Bitte erstelle sie im selben Verzeichnis.")
 
-# 3. Webseite aufbauen
-st.set_page_config(page_title="Huberts KI-Flugwetter", page_icon="🛩️", layout="wide")
+# 3. Webseite aufbauen (Mobile-optimiert)
+# "centered" sorgt dafür, dass es auf dem Desktop gut lesbar bleibt und sich auf dem Handy perfekt einpasst.
+st.set_page_config(page_title="KI Flugwetter Hubert", page_icon="🛩️", layout="centered")
 
-# --- NEU: Seitenleiste (Sidebar) für Einstellungen und Schnellzugriffe ---
-with st.sidebar:
-    st.header("⚙️ Steuerung")
-    
-    # Button zum Leeren des Chat-Verlaufs
-    if st.button("🗑️ Neues Briefing (Chat leeren)", use_container_width=True):
+# Kopfbereich mit Titel und Löschen-Button nebeneinander
+col1, col2 = st.columns([3, 1])
+with col1:
+    st.title("🛩️ KI Flugwetter Hubert")
+with col2:
+    st.write("") # Etwas Abstand
+    if st.button("🗑️ Reset", use_container_width=True, help="Chat leeren"):
         st.session_state.messages = []
-        st.rerun() # Lädt die Seite neu
-        
-    st.divider()
+        st.rerun()
+
+st.markdown("Gib einen Ort, einen ICAO-Code oder eine Flugstrecke ein. Die KI sucht über das Internet nach aktuellen Daten und erstellt ein fundiertes Briefing.")
+
+# --- Mobile-freundliche Schnellzugriffe (Expander statt Sidebar) ---
+quick_prompt = None
+with st.expander("📍 Schnell-Briefings (Hier tippen zum Ausklappen)", expanded=False):
+    st.markdown("Tippe auf einen Button, um direkt eine Abfrage zu starten:")
     
-    st.header("📍 Schnell-Briefings")
-    st.markdown("Klicke auf einen Button, um direkt eine Abfrage zu starten:")
-    
-    # Variablen für die Schnell-Buttons
-    quick_prompt = None
+    # Buttons untereinander (ideal für die Touch-Bedienung auf Handys)
     if st.button("EDSF (Hütten-Hotzenwald)", use_container_width=True):
         quick_prompt = "Bitte gib mir ein aktuelles VFR- und Segelflug-Briefing für den Flugplatz Hütten-Hotzenwald (EDSF). Achte besonders auf lokale Gegebenheiten im Hotzenwald."
     if st.button("LSZK (Speck Fehraltorf)", use_container_width=True):
         quick_prompt = "Bitte rufe die aktuellen Wetterdaten für den Flugplatz Speck in Fehraltorf (LSZK) ab und erstelle ein präzises VFR-Briefing."
     if st.button("Wangen bei Dübendorf", use_container_width=True):
-        quick_prompt = "Bitte gib mir ein detailliertes VFR-Wetterbriefing für Wangen bei Dübendorf, inklusive Nowcasting für die nächsten Stunden."
+        quick_prompt = "Bitte gib mir eine allgemeine, detaillierte Wettervorhersage für Wangen bei Dübendorf. Da dies kein Flugplatz ist, brauche ich hier nur das allgemeine Lokalwetter (Temperatur, Wind, Niederschlag, allgemeine Bewölkung) ohne spezielles VFR-Briefing."
     if st.button("Thermik: Schwarzwald & Alb", use_container_width=True):
         quick_prompt = "Erstelle eine detaillierte Thermikprognose für den Schwarzwald und die Schwäbische Alb für heute und morgen. Bewerte die thermische Güte, die erwartete Basis der Cumuluswolken, mögliche Inversionen und warne vor potenziellen Überentwicklungen oder großflächiger Abschirmung."
 
-# --- Hauptbereich ---
-st.title("🛩️ Huberts KI-Flugwetter")
-st.markdown("Gib einen Ort, einen ICAO-Code oder eine Flugstrecke ein. Die KI sucht über das Internet nach aktuellen Daten und erstellt ein fundiertes Briefing.")
+st.divider()
 
 # 4. Verlauf als einfache Liste speichern 
 if "messages" not in st.session_state:
@@ -55,10 +56,10 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# 6. Das Eingabefeld für Ort/Flugstrecke
-chat_input_text = st.chat_input("Beispiel: Wie wird das Wetter für einen VFR Flug rund um Ossingen morgen Vormittag?")
+# 6. Das Eingabefeld für Ort/Flugstrecke (bleibt auf Handys automatisch unten haften)
+chat_input_text = st.chat_input("Ort, ICAO-Code oder Flugstrecke eingeben...")
 
-# Kombinieren von manueller Eingabe ODER Klick auf einen Sidebar-Button
+# Kombinieren von manueller Eingabe ODER Klick auf einen Schnell-Button
 active_prompt = chat_input_text or quick_prompt
 
 if active_prompt:
